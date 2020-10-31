@@ -1,7 +1,7 @@
 from classes import Gate
 
+# A helper of get_eq_gate() to package 'inputs' and 'output' attributes nicely
 def get_inputs_output(str, start):
-  # input_line = get_io(fp, "input")
   inputs = []
   i = start + 1
   while(i < len(str) - 2):
@@ -9,32 +9,22 @@ def get_inputs_output(str, start):
     while(i < len(str) - 3 and str[i] != ','):
       node = node + str[i]
       i += 1
-    # print("hi", node);
     inputs.append(node);
     i += 1
   output = inputs.pop(0);
-  # print(inputs);
   return (inputs, output)
-  # return input_list
 
-
+# Converts a line 'str' read from the file to a Gate object
 def get_eq_gate(str, start):
   i = start;
   name = "";
-  # print("hello")
   while(str[i] != '('):
     name = name + str[i];
     i += 1;
   (inputs, output) = get_inputs_output(str, i);
-  print(Gate(name, inputs, output)) # use .output or .inputs or .name to print and verify the Gate object here. We will eventually return this object to caller function
+  return Gate(name, inputs, output) 
 
-# useless
-def get_nand_xnor(str, start):
-  pass
-# useless
-def get_remaining_gate(str, start):
-  pass
-
+# A method to control the flow towards get_eq_gate() function
 def str_to_gate(str):
   if (str[0:2] == "or"):
     return get_eq_gate(str, 3)
@@ -45,6 +35,7 @@ def str_to_gate(str):
   else:
     return -1;
 
+# Returns a list of Gate objects
 def get_gates_data(fp):
   content = fp.readlines()
   fp.seek(0);
@@ -57,6 +48,7 @@ def get_gates_data(fp):
       gates_list.append(gate_data)
   return gates_list
 
+# reads the input/output symbols based upon the 'str'
 def get_io(fp, str):
   content = fp.readlines()
   fp.seek(0);
@@ -93,20 +85,23 @@ def get_output_list(fp):
     i += 1
   return output_list
 
-
+# Main function
 def main():
   fp = open("input.v", "r")
   input_list = get_input_list(fp)
   output_list = get_output_list(fp)
-  print(input_list)
-  print(output_list)
+  print("Overall inputs", input_list)
+  print("Overall outputs", output_list)
   GateData = get_gates_data(fp);
+  
+  # Below is the format to access the data in GateData list
+  print(GateData[2].inputs);
   
   fp.close()
   # print("Some nonsense\n")
 
 
-
+# Entry point
 if __name__ == "__main__":
   main()
  
