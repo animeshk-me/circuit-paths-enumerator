@@ -1,7 +1,7 @@
 class Gate:
   
-  def __init__(self, name, inputs, outputs):
+  def __init__(self, name, inputs, output):
     self.name = name
     self.inputs = inputs;
-    self.outputs = outputs;
+    self.output = output;
   

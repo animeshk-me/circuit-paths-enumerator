@@ -1,13 +1,47 @@
 from classes import Gate
 
-def Str2Gate(str):
-  if str[0:2] == "or":
-  elif str[0:3] == "and":
-  elif str[0:3] == "not":
-  elif str[0:3] == "nor":
-  elif str[0:3] == "xor":
-  elif str[0:4] == "xnor":
-  elif str[0:4] == "nand":
+def get_inputs_output(str, start):
+  # input_line = get_io(fp, "input")
+  inputs = []
+  i = start + 1
+  while(i < len(str) - 2):
+    node = ""
+    while(i < len(str) - 3 and str[i] != ','):
+      node = node + str[i]
+      i += 1
+    # print("hi", node);
+    inputs.append(node);
+    i += 1
+  output = inputs.pop(0);
+  # print(inputs);
+  return (inputs, output)
+  # return input_list
+
+
+def get_eq_gate(str, start):
+  i = start;
+  name = "";
+  # print("hello")
+  while(str[i] != '('):
+    name = name + str[i];
+    i += 1;
+  (inputs, output) = get_inputs_output(str, i);
+  print(Gate(name, inputs, output)) # use .output or .inputs or .name to print and verify the Gate object here. We will eventually return this object to caller function
+
+# useless
+def get_nand_xnor(str, start):
+  pass
+# useless
+def get_remaining_gate(str, start):
+  pass
+
+def str_to_gate(str):
+  if (str[0:2] == "or"):
+    return get_eq_gate(str, 3)
+  elif (str[0:4] == "nand" or str[0:4] == "xnor"):
+    return get_eq_gate(str, 5)
+  elif (str[0:3] == "and" or str[0:3] == "not" or str[0:3] == "nor" or str[0:3] == "xor"):
+    return get_eq_gate(str, 4)
   else:
     return -1;
 
@@ -16,9 +50,9 @@ def get_gates_data(fp):
   fp.seek(0);
   gates_list = []
   for line in content:
-    if(line[0:9] == "endmodule")
+    if(line[0:9] == "endmodule"):
       break;
-    gate_data = Str2Gate(line);
+    gate_data = str_to_gate(line);
     if(gate_data != -1):
       gates_list.append(gate_data)
   return gates_list
