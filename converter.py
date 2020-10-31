@@ -1,4 +1,4 @@
-from classes import Gate
+from classes import Gate, Graph
 
 # A helper of get_eq_gate() to package 'inputs' and 'output' attributes nicely
 def get_inputs_output(str, start):
@@ -97,8 +97,25 @@ def main():
   # Below is the format to access the data in GateData list
   print(GateData[2].inputs);
   
+  # Declaring Graph
+  G = Graph();
+  v1 = "sanu"
+  v2 = "good"
+  v3 = "bad"
+  v4 = "shit"
+
+  # Adding edges
+  G.add_edge(v1, v2)
+  G.add_edge(v1, v3)
+  G.add_edge(v3, v4)
+  G.add_edge(v4, v2)
+  G.add_edge(v2, v3)
+  
+  G.print_graph();
   fp.close()
-  # print("Some nonsense\n")
+  # Dag = Graph();
+  # for gate in GateData:
+  
 
 
 # Entry point
