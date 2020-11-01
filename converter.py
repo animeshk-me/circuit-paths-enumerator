@@ -1,5 +1,25 @@
 from classes import Gate, Graph
 
+# Returns the graph equivalent of the data extracted from verilog file
+def get_final_graph(gateData, input_list, output_list):
+  graph = Graph();
+  # make edges from input nodes
+  for gate in gateData:
+    for node in input_list:
+      if(node in gate.inputs):
+        graph.add_edge(node, gate.name)
+  # make edges to output nodes
+  for gate in gateData:
+    for node in output_list:
+      if(node == gate.output):
+        graph.add_edge(gate.name, node)
+  # make edges among internal nodes(gates)
+  for src in gateData:
+    for dest in gateData:
+      if(src.output in dest.inputs):
+        graph.add_edge(src.name, dest.name)
+  return graph
+
 # A helper of get_eq_gate() to package 'inputs' and 'output' attributes nicely
 def get_inputs_output(str, start):
   inputs = []
@@ -92,10 +112,11 @@ def main():
   output_list = get_output_list(fp)
   print("Overall inputs", input_list)
   print("Overall outputs", output_list)
-  GateData = get_gates_data(fp);
+  gateData = get_gates_data(fp);
   
-  # Below is the format to access the data in GateData list
-  print(GateData[2].inputs);
+  #************************* For TK starts *************************#
+  # Below is the format to access the data in gateData list
+  print(gateData[2].inputs);
   
   # Declaring Graph
   G = Graph();
@@ -111,12 +132,13 @@ def main():
   G.add_edge(v4, v2)
   G.add_edge(v2, v3)
   
-  G.print_graph();
-  fp.close()
-  # Dag = Graph();
-  # for gate in GateData:
-  
+  G.print_graph("example");
+  #************************* For TK ends ***************************#
+ 
+  final_graph = get_final_graph(gateData, input_list, output_list)  
+  final_graph.print_graph("Final")
 
+  fp.close()
 
 # Entry point
 if __name__ == "__main__":
