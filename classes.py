@@ -19,8 +19,8 @@ class Graph:
     self.adj[a].append(b)
 
   # prints the graph
-  def print_graph(self):
-    print("The graph:_______________________")
+  def print_graph(self, name):
+    print(f"The graph {name}:\n_________________________________")
     for vertex in self.adj:
       print(vertex, "--->", self.adj[vertex])
     print("_________________________________\n");
