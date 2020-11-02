@@ -1,21 +1,44 @@
 from classes import Gate, Graph
 
+def get_final_paths(input_list, output_list, graph):
+  all_paths = []
+  for ip in input_list:
+    for op in output_list:
+      this_paths = get_all_paths(ip, op, graph)
+      all_paths.extend(this_paths)
+  return all_paths
+
+def append_a(a, u_paths):
+  a_paths = [f"({a})--->{path}" for path in u_paths]
+  return a_paths
+
+def get_all_paths(a, b, graph):
+  paths = []
+  if(a == b):
+    paths.append(f"({b})")
+    return paths
+  for u in graph.adj[a]:
+    u_paths = get_all_paths(u, b, graph)
+    a_paths = append_a(a, u_paths)  # append a at the beginning
+    paths.extend(a_paths)        # append new paths to the paths from a to b
+  return paths
+
 # Returns the graph equivalent of the data extracted from verilog file
-def get_final_graph(gateData, input_list, output_list):
+def get_final_graph(gate_data, input_list, output_list):
   graph = Graph();
   # make edges from input nodes
-  for gate in gateData:
+  for gate in gate_data:
     for node in input_list:
       if(node in gate.inputs):
         graph.add_edge(node, gate.name)
   # make edges to output nodes
-  for gate in gateData:
+  for gate in gate_data:
     for node in output_list:
       if(node == gate.output):
         graph.add_edge(gate.name, node)
   # make edges among internal nodes(gates)
-  for src in gateData:
-    for dest in gateData:
+  for src in gate_data:
+    for dest in gate_data:
       if(src.output in dest.inputs):
         graph.add_edge(src.name, dest.name)
   return graph
@@ -110,35 +133,17 @@ def main():
   fp = open("input.v", "r")
   input_list = get_input_list(fp)
   output_list = get_output_list(fp)
-  print("Overall inputs", input_list)
-  print("Overall outputs", output_list)
-  gateData = get_gates_data(fp);
-  
-  #************************* For TK starts *************************#
-  # Below is the format to access the data in gateData list
-  print(gateData[2].inputs);
-  
-  # Declaring Graph
-  G = Graph();
-  v1 = "sanu"
-  v2 = "good"
-  v3 = "bad"
-  v4 = "shit"
-
-  # Adding edges
-  G.add_edge(v1, v2)
-  G.add_edge(v1, v3)
-  G.add_edge(v3, v4)
-  G.add_edge(v4, v2)
-  G.add_edge(v2, v3)
-  
-  G.print_graph("example");
-  #************************* For TK ends ***************************#
+  # print("Overall inputs", input_list)
+  # print("Overall outputs", output_list)
+  gate_data = get_gates_data(fp);
+  fp.close()
  
-  final_graph = get_final_graph(gateData, input_list, output_list)  
+  final_graph = get_final_graph(gate_data, input_list, output_list)  
   final_graph.print_graph("Final")
 
-  fp.close()
+  all_paths = get_final_paths(input_list, output_list, final_graph)
+  print(*all_paths, sep="\n")
+
 
 # Entry point
 if __name__ == "__main__":
