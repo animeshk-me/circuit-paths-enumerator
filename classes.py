@@ -22,7 +22,7 @@ class Graph:
 
   # prints the graph
   def print_graph(self, name):
-    print(f"The graph {name}:\n----------------------------")
+    print(f"The {name} graph:\n----------------------------")
     for vertex in self.adj:
       print(vertex, "--->", self.adj[vertex])
     print("-----------------------------------\n");
