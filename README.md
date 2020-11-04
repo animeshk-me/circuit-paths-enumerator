@@ -24,7 +24,7 @@ ___
 * Run this command
 
         $ python3 enumerator.py
-* A prompt opens, enter the details. The verilog file should satisfy above constraints
+* A prompt opens, enter the file name. The verilog file should satisfy above constraints
     
         $ Enter a valid verilog file name: <filename>
     
