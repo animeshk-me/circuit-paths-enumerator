@@ -28,16 +28,16 @@ def main():
   input_list = get_input_list(fp)
   output_list = get_output_list(fp)
   
-  # convert the cicuit gates into
+  # convert the cicuit gates information into python list of objects
   gate_data = get_gates_data(fp)
   fp.close() # close files
   
-  # converting the data into a graph
+  # transforming the gate-data into a graph
   final_graph = get_final_graph(gate_data, input_list, output_list)  
   final_graph.print_graph("Final")
 
+  # enumerate all possible paths from Inputs to outputs and print
   print("All paths from inputs to outputs:\n")
-  # enumerate all possible path from Inputs to outputs and print
   all_paths = get_final_paths(input_list, output_list, final_graph)
   print(*all_paths, sep="\n")
   print("Total number of paths:", len(all_paths))
