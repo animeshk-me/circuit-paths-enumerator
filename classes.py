@@ -2,7 +2,7 @@ from collections import defaultdict
 
 #***************************************************************#
 
-# A Gate class to package all the data of a gate
+# A class to package all the information of one gate of the circuit
 class Gate:
   def __init__(self, name, inputs, output):
     self.name = name
@@ -11,7 +11,7 @@ class Gate:
 
 #***************************************************************#
 
-# A Graph class to represent a graph using adjancency list
+# A class to represent a graph using adjancency list
 class Graph:
   def __init__(self):
     self.adj = defaultdict(list) # Adjacency list
