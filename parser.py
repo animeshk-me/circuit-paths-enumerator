@@ -11,37 +11,38 @@ from classes import Gate
 
 
 # A helper of get_eq_gate() to package 'inputs' and 'output' attributes nicely
-def get_inputs_output(str, start):
+def get_inputs_output(string, start):
   inputs = []
-  i = start + 1
-  while(i < len(str) - 2):
+  i = start
+  while(string[i] != ')'):
     node = ""
-    while(i < len(str) - 3 and str[i] != ','):
-      node = node + str[i]
+    while(string[i + 1] != ')' and string[i + 1] != ','):
       i += 1
-    inputs.append(node);
+      if (string[i] != ' '):
+        node = node + string[i]
+    inputs.append(node)
     i += 1
   output = inputs.pop(0);
   return (inputs, output)
 
-# Converts a line 'str' read from the file to a Gate object
-def get_eq_gate(str, start):
+# Converts a line 'string' read from the file to a Gate object
+def get_eq_gate(string, start):
   i = start;
   name = "";
-  while(str[i] != '('):
-    name = name + str[i];
+  while(string[i] != '('):
+    name = name + string[i];
     i += 1;
-  (inputs, output) = get_inputs_output(str, i);
+  (inputs, output) = get_inputs_output(string, i);
   return Gate(name, inputs, output) 
 
 # A method to control the flow towards get_eq_gate() function
-def str_to_gate(str):
-  if (str[0:2] == "or"):
-    return get_eq_gate(str, 3)
-  elif (str[0:4] == "nand" or str[0:4] == "xnor"):
-    return get_eq_gate(str, 5)
-  elif (str[0:3] == "and" or str[0:3] == "not" or str[0:3] == "nor" or str[0:3] == "xor"):
-    return get_eq_gate(str, 4)
+def str_to_gate(string):
+  if (string[0:2] == "or"):
+    return get_eq_gate(string, 3)
+  elif (string[0:4] == "nand" or string[0:4] == "xnor"):
+    return get_eq_gate(string, 5)
+  elif (string[0:3] == "and" or string[0:3] == "not" or string[0:3] == "nor" or string[0:3] == "xor"):
+    return get_eq_gate(string, 4)
   else:
     return -1;
 
@@ -58,25 +59,26 @@ def get_gates_data(fp):
       gates_list.append(gate_data)
   return gates_list
 
-# reads the input/output symbols based upon the 'str'
-def get_io(fp, str):
+# reads the line containing input/output symbols based upon the 'string'
+def get_io(fp, string):
   content = fp.readlines()
-  fp.seek(0);
+  fp.seek(0)
   for line in content:
-    if(line[0:5] == str):
+    if(line[0:5] == string):
       return line
 
 # Returns the input nodes
 def get_input_list(fp):
   input_line = get_io(fp, "input")
   input_list = []
-  i = 6
-  while(i < len(input_line) - 1):
+  i = 5
+  while(input_line[i] != ';'):
     node = ""
-    while(i < len(input_line) - 1 and input_line[i] != ',' and input_line[i] != ';'):
-      node = node + input_line[i]
+    while(input_line[i + 1] != ';' and input_line[i + 1] != ','):
       i += 1
-    input_list.append(node);
+      if (input_line[i] != " "):
+        node = node + input_line[i]
+    input_list.append(node)
     i += 1
   return input_list
 
@@ -84,13 +86,14 @@ def get_input_list(fp):
 def get_output_list(fp):
   output_line = get_io(fp, "outpu")
   output_list = []
-  i = 7
-  while(i < len(output_line) - 1):
+  i = 5
+  while(output_line[i] != ';'):
     node = ""
-    while(i < len(output_line) - 1 and output_line[i] != ',' and output_line[i] != ';'):
-      node = node + output_line[i]
+    while(output_line[i + 1] != ';' and output_line[i + 1] != ','):
       i += 1
-    output_list.append(node);
+      if (output_line[i] != " "):
+        node = node + output_line[i]
+    output_list.append(node)
     i += 1
   return output_list
 
